@@ -6,15 +6,10 @@ import React, {
 } from "react";
 import { Button, Form, Input } from "antd";
 import type { IElectronics } from "../../shared/types";
-
-type FieldType = {
-  product_name: string;
-  price: number;
-  image: string;
-};
+import Home from "../home/Home";
 
 export const initialState: IElectronics = {
-  id: 0,
+  id: null,
   product_name: "",
   price: 0,
   image: "",
@@ -26,11 +21,18 @@ const Create: FC = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log(name);
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "price" ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    formData.id = new Date().getTime();
+    setdata((p) => [...p, formData]);
+
+    setFormData(initialState);
   };
 
   return (
@@ -41,29 +43,48 @@ const Create: FC = () => {
           autoComplete="off"
           layout="vertical"
           onSubmitCapture={handleSubmit}>
-          <Form.Item<FieldType>
+          <Form.Item<IElectronics>
             label="Product Name"
             name="product_name"
             rules={[{ required: true, message: "Please enter product name!" }]}>
-            <Input value={formData.product_name} onChange={handleChange} />
+            <Input
+              name="product_name"
+              value={formData.product_name}
+              onChange={handleChange}
+            />
           </Form.Item>
 
-          <Form.Item<FieldType>
+          <Form.Item<IElectronics>
             label="Product Price"
             name="price"
             rules={[
               { required: true, message: "Please enter product price!" },
             ]}>
-            <Input type="number" />
+            <Input
+              name="price"
+              type="number"
+              value={formData.price}
+              onChange={handleChange}
+            />
           </Form.Item>
 
-          <Form.Item<FieldType>
+          <Form.Item<IElectronics>
             label="Product Image"
             name="image"
             rules={[
               { required: true, message: "Please choose the product image!" },
             ]}>
-            <Input type="file" />
+            <Input
+              name="image"
+              type="file"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const imageUrl = URL.createObjectURL(file);
+                  setFormData((prev) => ({ ...prev, image: imageUrl }));
+                }
+              }}
+            />
           </Form.Item>
 
           <Form.Item label={null}>
@@ -73,6 +94,7 @@ const Create: FC = () => {
           </Form.Item>
         </Form>
       </div>
+      {<Home data={data} />}
     </div>
   );
 };
