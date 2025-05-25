@@ -6,7 +6,7 @@ import { Card } from "antd";
 const { Meta } = Card;
 
 interface IProps {
-  data: IElectronics[];
+  data?: IElectronics[];
 }
 
 const Home: FC<IProps> = ({ data }) => {
