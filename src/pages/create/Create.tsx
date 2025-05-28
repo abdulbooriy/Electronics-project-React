@@ -1,12 +1,15 @@
-import React, {
+import {
   useState,
+  memo,
   type ChangeEvent,
   type FC,
   type FormEvent,
 } from "react";
 import { Button, Form, Input } from "antd";
 import type { IElectronics } from "../../shared/types";
-import Home from "../home/Home";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 export const initialState: IElectronics = {
   id: null,
@@ -17,7 +20,6 @@ export const initialState: IElectronics = {
 
 const Create: FC = () => {
   const [formData, setFormData] = useState<IElectronics>(initialState);
-  const [data, setdata] = useState<IElectronics[]>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,18 +32,19 @@ const Create: FC = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     formData.id = new Date().getTime();
-    setdata((p) => [...p, formData]);
 
     setFormData(initialState);
   };
 
   return (
     <div className="flex flex-col items-center pt-20">
-      <div className="max-w-[450px] w-full border-gray-300 rounded-lg p-4">
+      <div className="max-w-[450px] w-full border border-gray-400 rounded-lg p-4">
+        <Title className="text-center" level={3}>Create Electronics</Title>
         <Form
           name="basic"
           autoComplete="off"
           layout="vertical"
+          style={{marginTop: "30px"}}
           onSubmitCapture={handleSubmit}>
           <Form.Item<IElectronics>
             label="Product Name"
@@ -94,9 +97,8 @@ const Create: FC = () => {
           </Form.Item>
         </Form>
       </div>
-      {<Home data={data} />}
     </div>
   );
 };
 
-export default React.memo(Create);
+export default memo(Create);

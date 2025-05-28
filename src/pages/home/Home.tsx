@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { memo, type FC } from "react";
 import type { IElectronics } from "../../shared/types";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Card } from "antd";
@@ -23,7 +23,10 @@ const Home: FC<IProps> = ({ data }) => {
               alt={product?.product_name}
             />
           }
-          actions={[<EditOutlined key="edit" style={{fontSize: "20px"}} />, <DeleteOutlined key="delete" style={{fontSize: "20px"}} />]}>
+          actions={[
+            <EditOutlined key="edit" style={{ fontSize: "20px" }} />,
+            <DeleteOutlined key="delete" style={{ fontSize: "20px" }} />,
+          ]}>
           <Meta
             className="text-center"
             title={
@@ -46,4 +49,4 @@ const Home: FC<IProps> = ({ data }) => {
   );
 };
 
-export default React.memo(Home);
+export default memo(Home);
